@@ -2,8 +2,8 @@ use std::fs::read_to_string;
 
 pub fn part_1() -> String {
     let sum = read_to_string("./src/day4/input.txt")
-        .unwrap()
-        .split('\n')
+        .expect("file not found")
+        .lines()
         .filter(|l| {
             let cols: Vec<&str> = l.split(',').collect();
             contains(range(cols[0]), range(cols[1]))
