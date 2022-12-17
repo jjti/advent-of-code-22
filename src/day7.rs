@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
 pub fn part_1() -> String {
-    format!("{}", calc(include_str!("input.txt")))
+    format!("{}", calc(include_str!("input/day7.txt")))
 }
 
 pub fn part_2() -> String {
-    let dirs = walk(include_str!("input.txt"));
+    let dirs = walk(include_str!("input/day7.txt"));
     let used = *dirs.get(".").expect("missing root");
     let free = 70_000_000 - used;
     let required = 30_000_000 - free;

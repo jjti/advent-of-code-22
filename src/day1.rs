@@ -1,7 +1,7 @@
 use std::fs::read_to_string;
 
 pub fn solve() -> String {
-    let file = read_to_string("src/day1/input.txt").unwrap();
+    let file = read_to_string("src/input/day1.txt").unwrap();
 
     let mut vals: Vec<i32> = Vec::new();
     let mut cur = 0;

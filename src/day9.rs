@@ -1,11 +1,11 @@
 use std::collections::HashSet;
 
 pub fn part_1() -> String {
-    format!("{}", solve(include_str!("input.txt"), 2))
+    format!("{}", solve(include_str!("input/day9.txt"), 2))
 }
 
 pub fn part_2() -> String {
-    format!("{}", solve(include_str!("input.txt"), 10))
+    format!("{}", solve(include_str!("input/day9.txt"), 10))
 }
 
 fn solve(input: &str, knots: usize) -> usize {

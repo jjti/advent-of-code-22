@@ -1,7 +1,7 @@
 use std::fs::read_to_string;
 
 pub fn part_1() -> String {
-    let input = read_to_string("src/day2/input.txt").unwrap();
+    let input = read_to_string("src/input/day2.txt").unwrap();
 
     let mut sum = 0;
     for line in input.split('\n') {
@@ -48,7 +48,7 @@ pub fn part_1() -> String {
 }
 
 pub fn part_2() -> String {
-    let input = read_to_string("src/day2/input.txt").unwrap();
+    let input = read_to_string("src/input/day2.txt").unwrap();
 
     let mut sum = 0;
     for line in input.split('\n') {

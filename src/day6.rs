@@ -3,7 +3,7 @@ use std::{collections::HashSet, fs::read_to_string};
 pub fn part_1() -> String {
     let mut chars: Vec<u8> = Vec::new();
     let mut ans = 0;
-    for (index, char) in read_to_string("src/day6/input.txt")
+    for (index, char) in read_to_string("src/input/day6.txt")
         .unwrap()
         .as_bytes()
         .iter()
@@ -25,7 +25,7 @@ pub fn part_1() -> String {
 pub fn part_2() -> String {
     let mut chars: Vec<u8> = Vec::new();
     let mut ans = 0;
-    for (index, char) in read_to_string("src/day6/input.txt")
+    for (index, char) in read_to_string("src/input/day6.txt")
         .unwrap()
         .as_bytes()
         .iter()

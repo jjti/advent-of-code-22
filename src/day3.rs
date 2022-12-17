@@ -2,7 +2,7 @@ use std::{collections::HashSet, fs::read_to_string};
 
 pub fn part_1() -> String {
     // A = 65; a = 97
-    let sum: u32 = read_to_string("./src/day3/input.txt")
+    let sum: u32 = read_to_string("./src/input/day3.txt")
         .unwrap()
         .split('\n')
         .map(score)
@@ -34,7 +34,7 @@ pub fn part_2() -> String {
     // A = 65; a = 97
     let mut sum = 0;
     let set: &mut HashSet<&u8> = &mut HashSet::new();
-    for (i, line) in read_to_string("./src/day3/input.txt")
+    for (i, line) in read_to_string("./src/input/day3.txt")
         .unwrap()
         .split('\n')
         .enumerate()

@@ -1,7 +1,7 @@
 use std::fs::read_to_string;
 
 pub fn part_1() -> String {
-    let sum = read_to_string("./src/day4/input.txt")
+    let sum = read_to_string("./src/input/day4.txt")
         .expect("file not found")
         .lines()
         .filter(|l| {
@@ -26,7 +26,7 @@ fn contains(r1: (i32, i32), r2: (i32, i32)) -> bool {
 
 // part_2 is like part_1 except it counts the lines where there's any overlap between the ranges at all.
 pub fn part_2() -> String {
-    let sum = read_to_string("./src/day4/input.txt")
+    let sum = read_to_string("./src/input/day4.txt")
         .unwrap()
         .split('\n')
         .filter(|l| {

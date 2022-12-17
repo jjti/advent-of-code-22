@@ -1,9 +1,9 @@
 pub fn part_1() -> String {
-    format!("{}", solve(include_str!("input.txt")))
+    format!("{}", solve(include_str!("input/day10.txt")))
 }
 
 pub fn part_2() -> String {
-    draw(include_str!("input.txt"))
+    draw(include_str!("input/day10.txt"))
 }
 
 /// get_cycles returns the register's value during each cycle

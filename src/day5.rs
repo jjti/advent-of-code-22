@@ -39,7 +39,7 @@ fn get_stacks() -> Vec<Vec<char>> {
         stacks.push(Vec::new());
     }
 
-    for line in read_to_string("./src/day5/input.txt").unwrap().lines() {
+    for line in read_to_string("./src/input/day5.txt").unwrap().lines() {
         if line.starts_with(" 1") {
             break;
         }
@@ -60,7 +60,7 @@ fn get_stacks() -> Vec<Vec<char>> {
 
 fn get_instructions() -> Vec<(usize, usize, usize)> {
     let mut instructions: Vec<(usize, usize, usize)> = Vec::new();
-    for line in read_to_string("./src/day5/input.txt").unwrap().lines() {
+    for line in read_to_string("./src/input/day5.txt").unwrap().lines() {
         if line.starts_with("move") {
             let cols = line.split_whitespace().collect::<Vec<&str>>();
             instructions.push((

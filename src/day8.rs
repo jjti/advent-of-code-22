@@ -1,5 +1,5 @@
 pub fn part_1() -> String {
-    format!("{}", count_visible(include_str!("input.txt")))
+    format!("{}", count_visible(include_str!("input/day8.txt")))
 }
 
 fn get_heights(input: &str) -> Vec<Vec<i8>> {
@@ -51,7 +51,7 @@ fn count_visible(input: &str) -> u32 {
 }
 
 pub fn part_2() -> String {
-    format!("{}", best_view(include_str!("input.txt")))
+    format!("{}", best_view(include_str!("input/day8.txt")))
 }
 
 fn best_view(input: &str) -> i32 {
