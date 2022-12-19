@@ -86,7 +86,7 @@ addx -5"
         )
     }
 
-    const example: &str = "addx 15
+    const EXAMPLE: &str = "addx 15
 addx -11
 addx 6
 addx -3
@@ -235,7 +235,7 @@ noop";
 
     #[test]
     fn test_solve() {
-        assert_eq!(13140, solve(example));
+        assert_eq!(13140, solve(EXAMPLE));
     }
 
     // close enough
