@@ -1,43 +1,14 @@
+use std::cmp::Ordering;
+
 pub fn part_1() -> String {
-    format!("{}", solve(include_str!("input/day13.txt")))
+    format!("{}", solve_part_1(include_str!("input/day13.txt")))
 }
 
-/// --- Part Two ---
-// Now, you just need to put all of the packets in the right order. Disregard the blank lines in your list of received packets.
-
-// The distress signal protocol also requires that you include two additional divider packets:
-
-// [[2]]
-// [[6]]
-// Using the same rules as before, organize all packets - the ones in your list of received packets as well as the two divider packets - into the correct order.
-
-// For the example above, the result of putting the packets in the correct order is:
-
-// []
-// [[]]
-// [[[]]]
-// [1,1,3,1,1]
-// [1,1,5,1,1]
-// [[1],[2,3,4]]
-// [1,[2,[3,[4,[5,6,0]]]],8,9]
-// [1,[2,[3,[4,[5,6,7]]]],8,9]
-// [[1],4]
-// [[2]]
-// [3]
-// [[4,4],4,4]
-// [[4,4],4,4,4]
-// [[6]]
-// [7,7,7]
-// [7,7,7,7]
-// [[8,7,6]]
-// [9]
-// Afterward, locate the divider packets. To find the decoder key for this distress signal, you need to determine the indices of the two divider packets and multiply them together. (The first packet is at index 1, the second packet is at index 2, and so on.) In this example, the divider packets are 10th and 14th, and so the decoder key is 140.
-// Organize all of the packets into the correct order. What is the decoder key for the distress signal?
 pub fn part_2() -> String {
-    "".to_string()
+    format!("{}", solve_part_2(include_str!("input/day13.txt")))
 }
 
-fn solve(input: &str) -> usize {
+fn solve_part_1(input: &str) -> usize {
     let lines: Vec<&str> = input.lines().collect();
 
     (0..lines.len())
@@ -65,11 +36,37 @@ fn solve(input: &str) -> usize {
         })
 }
 
-fn sorted_str(l: &str, r: &str) -> bool {
-    let left = parse(l);
-    let right = parse(r);
+fn solve_part_2(input: &str) -> i32 {
+    let mut vals: Vec<Vec<Val>> = input
+        .lines()
+        .into_iter()
+        .filter(|l| !l.is_empty())
+        .map(parse)
+        .collect();
+    vals.push(vec![Val::List(vec![Val::Int(6)])]);
+    vals.push(vec![Val::List(vec![Val::Int(2)])]);
 
-    sorted(left, right) < 0
+    vals.sort_by(|a, b| sorted(a, b));
+
+    let mut i = 0;
+    let mut j = 0;
+    for (k, v) in vals.into_iter().enumerate() {
+        if v.eq(&vec![Val::List(vec![Val::Int(2)])]) {
+            i = k + 1;
+        }
+        if v.eq(&vec![Val::List(vec![Val::Int(6)])]) {
+            j = k + 1;
+        }
+    }
+
+    (i * j) as i32
+}
+
+fn sorted_str(l: &str, r: &str) -> bool {
+    let left = &mut parse(l);
+    let right = &mut parse(r);
+
+    sorted(left, right) == Ordering::Less
 }
 
 #[derive(Debug, PartialEq)]
@@ -88,6 +85,15 @@ impl Val {
 
     fn new_list() -> Val {
         Val::List(vec![])
+    }
+}
+
+impl Clone for Val {
+    fn clone(&self) -> Self {
+        match self {
+            Val::Int(v) => Val::Int(*v),
+            Val::List(vals) => Val::List(vals.clone()),
+        }
     }
 }
 
@@ -143,18 +149,21 @@ fn parse(input_str: &str) -> Vec<Val> {
     }
 }
 
-fn sorted(mut left: Vec<Val>, mut right: Vec<Val>) -> i8 {
+fn sorted(left_input: &[Val], right_input: &[Val]) -> Ordering {
+    let left: &mut Vec<Val> = &mut left_input.to_vec();
+    let right: &mut Vec<Val> = &mut right_input.to_vec();
+
     if left.is_empty() {
         if right.is_empty() {
-            return 0;
+            return Ordering::Equal;
         }
-        return -1;
+        return Ordering::Less;
     }
 
     while !left.is_empty() {
         if right.is_empty() {
             // If the right list runs out of items first, the inputs are not in the right order.
-            return 1;
+            return Ordering::Greater;
         }
 
         let lval = left.remove(0);
@@ -164,35 +173,35 @@ fn sorted(mut left: Vec<Val>, mut right: Vec<Val>) -> i8 {
             (Val::Int(l), Val::Int(r)) => {
                 if l > r {
                     // If the left integer is higher than the right integer, the inputs are not in the right order.
-                    return 1;
+                    return Ordering::Greater;
                 } else if l < r {
                     // If the left integer is lower than the right integer, the inputs are in the right order.
-                    return -1;
+                    return Ordering::Less;
                 }
                 // Otherwise, the inputs are the same integer; continue checking the next part of the input.
                 continue;
             }
             (Val::List(l), Val::List(r)) => {
                 // If both values are lists, compare the first value of each list, then the second value, and so on
-                match sorted(l, r) {
-                    v if v < 0 => return -1,
-                    v if v > 0 => return 1,
+                match sorted(&l, &r) {
+                    Ordering::Less => return Ordering::Less,
+                    Ordering::Greater => return Ordering::Greater,
                     _ => (), // continue
                 }
             }
             (Val::Int(l), Val::List(r)) => {
                 // If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
-                match sorted(vec![Val::Int(l)], r) {
-                    v if v < 0 => return -1,
-                    v if v > 0 => return 1,
+                match sorted(&vec![Val::Int(l)], &r) {
+                    Ordering::Less => return Ordering::Less,
+                    Ordering::Greater => return Ordering::Greater,
                     _ => (), // continue
                 }
             }
             (Val::List(l), Val::Int(r)) => {
                 // If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
-                match sorted(l, vec![Val::Int(r)]) {
-                    v if v < 0 => return -1,
-                    v if v > 0 => return 1,
+                match sorted(&l, &vec![Val::Int(r)]) {
+                    Ordering::Less => return Ordering::Less,
+                    Ordering::Greater => return Ordering::Greater,
                     _ => (), // continue
                 }
             }
@@ -201,9 +210,9 @@ fn sorted(mut left: Vec<Val>, mut right: Vec<Val>) -> i8 {
 
     // println!("left: {:?}, right: {:?}", left, right);
     if right.is_empty() {
-        return 0;
+        return Ordering::Equal;
     }
-    -1
+    Ordering::Less
 }
 
 #[cfg(test)]
@@ -308,7 +317,7 @@ mod tests {
     fn test_solve() {
         assert_eq!(
             13,
-            solve(
+            solve_part_1(
                 "[1,1,3,1,1]
 [1,1,5,1,1]
 
@@ -333,6 +342,38 @@ mod tests {
 [1,[2,[3,[4,[5,6,7]]]],8,9]
 [1,[2,[3,[4,[5,6,0]]]],8,9]"
             ),
+        );
+    }
+
+    #[test]
+    fn test_solve_part_2() {
+        assert_eq!(
+            solve_part_2(
+                "[1,1,3,1,1]
+[1,1,5,1,1]
+
+[[1],[2,3,4]]
+[[1],4]
+
+[9]
+[[8,7,6]]
+
+[[4,4],4,4]
+[[4,4],4,4,4]
+
+[7,7,7,7]
+[7,7,7]
+
+[]
+[3]
+
+[[[]]]
+[[]]
+
+[1,[2,[3,[4,[5,6,7]]]],8,9]
+[1,[2,[3,[4,[5,6,0]]]],8,9]"
+            ),
+            140
         );
     }
 }

@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
 pub fn part_1() -> String {
-    format!("{}", solve(include_str!("input.txt"), false))
+    format!("{}", solve(include_str!("input/day12.txt"), false))
 }
 
 pub fn part_2() -> String {
-    format!("{}", solve(include_str!("input.txt"), true))
+    format!("{}", solve(include_str!("input/day12.txt"), true))
 }
 
 fn solve(input: &str, init_zero: bool) -> i32 {
