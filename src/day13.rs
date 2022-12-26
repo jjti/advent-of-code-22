@@ -191,7 +191,7 @@ fn sorted(left_input: &[Val], right_input: &[Val]) -> Ordering {
             }
             (Val::Int(l), Val::List(r)) => {
                 // If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
-                match sorted(&vec![Val::Int(l)], &r) {
+                match sorted(&[Val::Int(l)], &r) {
                     Ordering::Less => return Ordering::Less,
                     Ordering::Greater => return Ordering::Greater,
                     _ => (), // continue
@@ -199,7 +199,7 @@ fn sorted(left_input: &[Val], right_input: &[Val]) -> Ordering {
             }
             (Val::List(l), Val::Int(r)) => {
                 // If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
-                match sorted(&l, &vec![Val::Int(r)]) {
+                match sorted(&l, &[Val::Int(r)]) {
                     Ordering::Less => return Ordering::Less,
                     Ordering::Greater => return Ordering::Greater,
                     _ => (), // continue
